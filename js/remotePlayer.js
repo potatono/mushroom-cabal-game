@@ -16,9 +16,7 @@ RemotePlayer.add = function(key, x, y) {
 	RemotePlayer.players[key] = newPC;
 }
 
-RemotePlayer.update = function(key, data) {
-	Player.prototype.update.call(this);
-
+RemotePlayer.change = function(key, data) {
 	pc = RemotePlayer.players[key];
 	pc.x = data.x;
 	pc.y = data.y;

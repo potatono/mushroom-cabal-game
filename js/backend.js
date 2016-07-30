@@ -20,7 +20,7 @@ function Backend() {
 	// Setup event handlers
 	var self = this;
 	gameBackend.on("child_added", function(data) { self.addPlayer(data) });
-	gameBackend.on("child_changed", function(data) { self.updatePlayer(data) });
+	gameBackend.on("child_changed", function(data) { self.changePlayer(data) });
 	gameBackend.on("child_removed", function(data) { self.removePlayer(data) });
 }
 
@@ -35,11 +35,12 @@ Backend.prototype.addPlayer = function(data) {
 	}
 }
 
-Backend.prototype.updatePlayer = function(data) {
+Backend.prototype.changePlayer = function(data) {
 	// If the update isn't ours, update RemotePlayer
+	console.log("Update");
 	if (data.key != this.ref.key) {
 		var val = data.val();
-		RemotePlayer.update(data.key, val);
+		RemotePlayer.change(data.key, val);
 	}
 }
 

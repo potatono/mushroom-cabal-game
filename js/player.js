@@ -23,6 +23,8 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
+	game.physics.arcade.collide(this, game.map.platforms);
+
 	// Do not allow walking off the left of the map
 	if (this.x < 1) {
 		this.body.velocity.x = 0;

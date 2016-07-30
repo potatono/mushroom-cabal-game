@@ -17,7 +17,7 @@ function LocalPlayer(game, x, y, key, frame) {
     // Have the game camera follow me
     game.camera.follow(this);
 
-    
+    this.checkForWorldBounds = true;
 }
 
 LocalPlayer.prototype = Object.create(Player.prototype);

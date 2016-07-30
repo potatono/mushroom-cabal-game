@@ -43,9 +43,16 @@ Player.prototype.collectCoin = function(player, coin) {
 }
 
 Player.prototype.bonk = function() {
-	// TODO FIXME this needs to be tighter.  It should take into account which way
-	// the player is facing and look at the front corner and then the back corner.
-	var tile = game.map.getTileWorldXY(this.x, this.y-32,32,32, game.map.platforms);
+	var tile = null;
+
+	if (this.body.velocity > 0) {
+		tile = game.map.getTileWorldXY(this.x + this.width, this.y-32, 32, 32, game.map.platforms) ||
+			game.map.getTileWorldXY(this.x, this.y-32, 32, 32, game.map.platforms);
+	}
+	else {
+		tile = game.map.getTileWorldXY(this.x, this.y-32, 32, 32, game.map.platforms) ||
+			game.map.getTileWorldXY(this.x + this.width, this.y-32, 32, 32, game.map.platforms);
+	}
 	
 	if (tile != null) {
 		// If the tile has a sprite associated with it and it has an activate
@@ -53,22 +60,10 @@ Player.prototype.bonk = function() {
 		if (tile.sprite && tile.sprite.activate) {
 			tile.sprite.activate();
 		}
-		// Otherwise if it's a brick, just remove it.  TODO REFACTOR
+		// Otherwise if it's a brick, just explode it.
+		// TODO, Make "little mario" brick mode
 		else if (tile.index == 15) {
-			// Remove it
-			game.map.removeTile(tile.x, tile.y);
-
-			// Add it back after awhile
-			var timer = game.time.create(true);
-			timer.add(
-				10000 + Math.random() * 30000, 
-				function(i, x, y) { game.map.putTile(i, x, y, game.map.platforms) }, 
-				this,
-				tile.index,
-				tile.x,
-				tile.y
-			);
-			timer.start();
+			Brick.explode(game, tile);
 		}
 	}
 }

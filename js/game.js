@@ -22,6 +22,7 @@ function preload() {
     game.load.spritesheet('coin', 'assets/coin.png', 32, 32);
     game.load.tilemap('objects', 'assets/map1-1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/map-tiles.png');
+    game.load.spritesheet('brickparts', 'assets/brick.png', 16, 16);
 }
 
 // Called by Phaser.Game init to set up the game
@@ -44,6 +45,11 @@ function create() {
 
     // Setup our chat input (TODO move)
     createChatInput();
+
+
+    var key = game.input.keyboard.addKey(Phaser.Keyboard.P);
+    key.onUp.add(function() { game.paused = !game.paused }, game);
+
 }
 
 // Called on each frame

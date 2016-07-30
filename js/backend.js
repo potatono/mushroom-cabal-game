@@ -52,6 +52,7 @@ Backend.prototype.removePlayer = function(data) {
 
 // Regularly called from LocalPlayer to update database
 Backend.prototype.update = function(player) {
+	//console.log("BooP");
 	this.ref.set({
 	    "x": player.x,
 	    "y": player.y,

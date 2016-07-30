@@ -16,6 +16,8 @@ function LocalPlayer(game, x, y, key, frame) {
 
     // Have the game camera follow me
     game.camera.follow(this);
+
+    
 }
 
 LocalPlayer.prototype = Object.create(Player.prototype);
@@ -36,6 +38,7 @@ LocalPlayer.prototype.update = function() {
 			this.body.velocity.x = Math.max(this.body.velocity.x, -300);
 
 		this.animations.play('left');
+
 	}
 	else if (this.cursors.right.isDown) {
 		this.body.acceleration.x = 400;

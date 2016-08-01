@@ -18,7 +18,6 @@ Brick.spawnPart = function(x, y, frame, dir) {
 
 Brick.explode = function(game, tile) {
 	// Remove it
-	console.log(tile);
 	game.map.removeTile(tile.x, tile.y);
 
 	// Add it back after awhile
@@ -37,5 +36,13 @@ Brick.explode = function(game, tile) {
 	Brick.spawnPart(tile.worldX + 16, tile.worldY, 1, 1);
 	Brick.spawnPart(tile.worldX, tile.worldY + 16, 2, -1);
 	Brick.spawnPart(tile.worldX + 16, tile.worldY + 16, 3, 1);
+}
+
+Brick.drop = function(x, y) {
+	var tile = game.map.getTileWorldXY(x, y, 32, 32, game.map.platforms)
+	var newTile = game.map.putTileWorldXY(15, x, y, 32, 32, game.map.platforms);
+	if (tile != null) {
+		newTile.oldIndex = tile.index;
+	}
 }
 

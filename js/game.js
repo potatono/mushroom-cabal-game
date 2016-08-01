@@ -23,6 +23,7 @@ function preload() {
     game.load.tilemap('objects', 'assets/map1-1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/map-tiles.png');
     game.load.spritesheet('brickparts', 'assets/brick.png', 16, 16);
+    game.load.image('selector', 'assets/selector.png', 32, 32);
 }
 
 // Called by Phaser.Game init to set up the game
@@ -55,7 +56,6 @@ function create() {
 // Called on each frame
 function update() {
 	// Do collision detection on player vs. ground/platforms
-	game.physics.arcade.collide(player, game.map.platforms);
 }
 
 // Load the map we created in Tiled
@@ -98,7 +98,7 @@ function createChatInput() {
 
 // Called on every frame when we render.  Used for debugging.
 function render() {
-	game.debug.bodyInfo(player, 0, 100);
+//	game.debug.bodyInfo(player, 0, 100);
 }
 
 // Make sure we destroy players on the backend so we don't leave a bunch

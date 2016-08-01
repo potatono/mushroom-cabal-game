@@ -31,6 +31,12 @@ Player.prototype.update = function() {
 		this.x = 1;
 	}
 
+	if (this.y > game.world.height * 2) {
+		this.y = 128;
+		this.x = this.x - 128;
+		this.body.velocity.y = -50;
+	}
+
 	// If we ran into a tile, check to see if we can activate it
 	if (this.body.blocked.up) {
 		this.bonk();

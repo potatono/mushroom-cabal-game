@@ -37,7 +37,6 @@ Backend.prototype.addPlayer = function(data) {
 
 Backend.prototype.changePlayer = function(data) {
 	// If the update isn't ours, update RemotePlayer
-	console.log("Update");
 	if (data.key != this.ref.key) {
 		var val = data.val();
 		RemotePlayer.change(data.key, val);

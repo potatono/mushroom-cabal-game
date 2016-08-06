@@ -100,7 +100,7 @@ function createChatInput() {
 
 // Called on every frame when we render.  Used for debugging.
 function render() {
-	game.debug.bodyInfo(player, 0, 100);
+	//game.debug.bodyInfo(player, 0, 100);
 }
 
 // Make sure we destroy players on the backend so we don't leave a bunch

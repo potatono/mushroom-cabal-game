@@ -14,12 +14,14 @@ Builder.prototype = Object.create(Phaser.Sprite.prototype);
 Builder.prototype.constructor = Builder;
 
 Builder.prototype.onSpaceDown = function() {
-	var tile = game.map.getTileWorldXY(this.x, this.y, 32, 32, game.map.platforms)
-	var newTile = game.map.putTileWorldXY(this.index, this.x, this.y, 32, 32, game.map.platforms);
+	// var tile = game.map.getTileWorldXY(this.x, this.y, 32, 32, game.map.platforms)
+	// var newTile = game.map.putTileWorldXY(this.index, this.x, this.y, 32, 32, game.map.platforms);
 
-	if (tile != null) {
-		newTile.oldIndex = tile.index;
-	}
+	// if (tile != null) {
+	// 	newTile.oldIndex = tile.index;
+	// }
+
+	backend.updateTile(this.x, this.y, this.index);
 }
 
 Builder.prototype.onActorOut = function() {

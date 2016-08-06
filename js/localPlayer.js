@@ -79,7 +79,7 @@ LocalPlayer.prototype.onUpDown = function() {
 }
 
 LocalPlayer.prototype.send = function() {
-	backend.update(this);
+	backend.updatePlayer(this);
 }
 
 LocalPlayer.prototype.onActorOut = function() {

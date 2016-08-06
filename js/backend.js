@@ -10,50 +10,53 @@ function Backend() {
       storageBucket: "mushroom-cabal.appspot.com",
     };
     var backend = firebase.initializeApp(config);
-    // TODO Only one room for now
-	var gameBackend = backend.database().ref("/rooms/chat/game")
+	var players = backend.database().ref("/rooms/chat/players")
+	this.tilesRef = backend.database().ref("/rooms/chat/tiles");
 
 	// Create an entry for our local player
-	var key = gameBackend.push().key;
-	this.ref = gameBackend.child(key);
+	var key = players.push().key;
+	this.playerRef = players.child(key);
 
 	// Setup event handlers
 	var self = this;
-	gameBackend.on("child_added", function(data) { self.addPlayer(data) });
-	gameBackend.on("child_changed", function(data) { self.changePlayer(data) });
-	gameBackend.on("child_removed", function(data) { self.removePlayer(data) });
+	players.on("child_added", function(data) { self.playerAdded(data) });
+	players.on("child_changed", function(data) { self.playerChanged(data) });
+	players.on("child_removed", function(data) { self.playerRemoved(data) });
+	this.tilesRef.on("child_added", function(data) { self.tileAdded(data) });
+	this.tilesRef.on("child_removed", function(data) { self.tileRemoved(data) });
+	this.tilesRef.on("child_changed", function(data) { self.tileChanged(data) });
+
 }
 
 Backend.prototype = Object.create(Object.prototype);
 Backend.prototype.constructor = Backend;
 
-Backend.prototype.addPlayer = function(data) {
+Backend.prototype.playerAdded = function(data) {
 	// If the add isn't ourself, update RemotePlayer
-	if (data.key != this.ref.key) {
+	if (data.key != this.playerRef.key) {
 		var val = data.val();
 		RemotePlayer.add(data.key, val.x, val.y)
 	}
 }
 
-Backend.prototype.changePlayer = function(data) {
+Backend.prototype.playerChanged = function(data) {
 	// If the update isn't ours, update RemotePlayer
-	if (data.key != this.ref.key) {
+	if (data.key != this.playerRef.key) {
 		var val = data.val();
 		RemotePlayer.change(data.key, val);
 	}
 }
 
-Backend.prototype.removePlayer = function(data) {
+Backend.prototype.playerRemoved = function(data) {
 	// If the remove isn't us, update RemotePlayer
-	if (data.key != this.ref.key) {
+	if (data.key != this.playerRef.key) {
 		RemotePlayer.remove(data.key);
 	}
 }
 
 // Regularly called from LocalPlayer to update database
-Backend.prototype.update = function(player) {
-	//console.log("BooP");
-	this.ref.set({
+Backend.prototype.updatePlayer = function(player) {
+	this.playerRef.set({
 	    "x": player.x,
 	    "y": player.y,
 	    "vx": player.body.velocity.x,
@@ -65,8 +68,23 @@ Backend.prototype.update = function(player) {
 // Clean up entry as we exist so we don't leave a bunch of
 // abandoned players on the map.
 Backend.prototype.destroy = function() {
-	this.ref.remove();
-	this.ref = null;
+	this.playerRef.remove();
+	this.playerRef = null;
+}
+
+Backend.prototype.tileAdded = Backend.prototype.tileChanged = function(data) {
+	var pos = data.key.split(",");
+	var val = data.val();
+	game.map.putTileWorldXY(val, pos[0], pos[1], 32, 32, game.map.platforms);
+}
+
+Backend.prototype.tileRemoved = function(data, name) {
+	var pos = data.key.split(",");
+	game.map.removeTileWorldXY(pos[0], pos[1], 32, 32, game.map.platforms);
+}
+
+Backend.prototype.updateTile = function(x, y, index) {
+	this.tilesRef.child(x + "," + y).set(index);
 }
 
 var backend = new Backend();

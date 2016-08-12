@@ -1,0 +1,24 @@
+#content {
+	position: relative;
+	width: 1024px;
+	margin: 0 auto;
+	padding:0;
+}
+
+#chat {
+	width: 202px;
+	height: 537px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 1px solid #ccc;
+	padding: 5px;
+
+}
+
+#chat-input {
+	position: absolute;
+	top: 522px;
+	width: 787px;
+	padding: 5px;
+}

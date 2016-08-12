@@ -10,10 +10,12 @@ function Backend() {
       storageBucket: "mushroom-cabal.appspot.com",
     };
     var backend = firebase.initializeApp(config);
-	var players = backend.database().ref("/rooms/chat/players")
+
+    this.chatRef = backend.database().ref("/rooms/chat/chat");
 	this.tilesRef = backend.database().ref("/rooms/chat/tiles");
 
 	// Create an entry for our local player
+	var players = backend.database().ref("/rooms/chat/players")
 	var key = players.push().key;
 	this.playerRef = players.child(key);
 
@@ -25,6 +27,9 @@ function Backend() {
 	this.tilesRef.on("child_added", function(data) { self.tileAdded(data) });
 	this.tilesRef.on("child_removed", function(data) { self.tileRemoved(data) });
 	this.tilesRef.on("child_changed", function(data) { self.tileChanged(data) });
+	this.chatRef.on("child_added", function(data) { self.chatAdded(data) });
+	this.chatRef.on("child_removed", function(data) { self.chatRemoved(data) });
+	this.chatRef.on("child_changed", function(data) { self.chatChanged(data) });
 
 }
 
@@ -87,6 +92,22 @@ Backend.prototype.updateTile = function(x, y, index) {
 	this.tilesRef.child(x + "," + y).set(index);
 }
 
-var backend = new Backend();
+
+Backend.prototype.chatAdded = function(data) {
+	chat.append(data.key, data.val());
+}
+
+Backend.prototype.chatChanged = function(data) {
+	chat.update(data.key, data.val());
+}
+
+Backend.prototype.chatRemoved = function(data) {
+	chat.remove(data.key);
+}
+
+Backend.prototype.chatSay = function(data) {
+	this.chatRef.push(data);
+}
+
 
 

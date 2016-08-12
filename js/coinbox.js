@@ -17,7 +17,6 @@ function Coinbox(game, x, y, key, frame) {
 	this.bounce.to({ y: y-20 }, 100, Phaser.Easing.Default, false, 0, 0, true);
 }
 
-
 Coinbox.prototype = Object.create(Phaser.Sprite.prototype);
 Coinbox.prototype.constructor = Coinbox;
 

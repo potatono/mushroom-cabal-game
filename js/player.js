@@ -2,7 +2,7 @@
  * Common base class for RemotePlayer and LocalPlayer.
  */
 function Player(game, x, y, spritekey, frame) {
-	Phaser.Sprite.call(this, game, x, y, 'dude');
+	Phaser.Sprite.call(this, game, x, y, spritekey);
 
     game.physics.arcade.enable(this);
 

@@ -2,10 +2,12 @@ var game;
 var player;
 var builder;
 var menu;
+var chat;
+var backend;
 
 // Called in input.html to start the game.  TODO migrate to a window.load or document.ready event.
 function start() {
-	game = new Phaser.Game(800, 512, Phaser.AUTO, '', { 
+	game = new Phaser.Game(800, 512, Phaser.AUTO, 'game', { 
 		preload: preload, 
 		create: create, 
 		render: render 
@@ -19,6 +21,9 @@ function preload() {
   game.load.image('ground', 'assets/platform.png');
   game.load.image('star', 'assets/star.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+  game.load.spritesheet('goomba', 'assets/goomba.png', 32, 32);
+  game.load.spritesheet('koopa', 'assets/koopa.png', 19, 27);
+
   game.load.spritesheet('coinbox', 'assets/coinbox.png', 32, 32);
   game.load.spritesheet('coin', 'assets/coin.png', 32, 32);
   game.load.tilemap('objects', 'assets/map1-1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -45,10 +50,7 @@ function create() {
   Coin.group.enableBody = true;
 
   // Set up our player
-  player = new LocalPlayer(game, 32, 128, 'dude');
-
-  // Setup our chat input (TODO move)
-  createChatInput();
+  player = new LocalPlayer(game, 32, 128, 'goomba');
 
   // TODO REFACTOR move to contorls
   var key = game.input.keyboard.addKey(Phaser.Keyboard.P);
@@ -57,6 +59,8 @@ function create() {
   menu = new Menu(game);
   builder = new Builder(game);
   game.controls = new Controls(game);
+  chat = new Chat(game);
+  backend = new Backend();
 }
 
 // Load the map we created in Tiled
@@ -82,21 +86,6 @@ function createMap() {
   game.map.createFromTiles(14, 1, 'coinbox', game.map.platforms, game.world, { customClass: Coinbox });
 }
 
-// Create the chat input box TODO move me into separate class..
-function createChatInput() {
-	var input = document.createElement("input");
-    input.id = "chat-input";
-    input.addEventListener("focus", function() { game.input.keyboard.enabled = false; });
-    input.addEventListener("focusout", function() { game.input.keyboard.enabled = true; });
-    input.addEventListener("blur", function() { game.input.keyboard.enabled = true; });
-    input.addEventListener("keyup", function(e) { if (e.keyCode == 27) { game.canvas.focus(); }})
-    input.tabIndex = 2;
-    game.canvas.tabIndex = 1;
-    // TODO REFACTOR move to contorls
-    var key = game.input.keyboard.addKey(Phaser.Keyboard.T);
-    key.onUp.add(function() { document.getElementById('chat-input').focus(); }, game);
-    document.body.appendChild(input);
-}
 
 // Called on every frame when we render.  Used for debugging.
 function render() {

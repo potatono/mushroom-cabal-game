@@ -63,3 +63,7 @@ Controls.prototype.onEscapeDown = function() {
 Controls.prototype.onSpaceDown = function() {
 	return this.changeActor(builder)
 }
+
+Controls.prototype.onTDown = function() {
+	document.getElementById('chat-input').focus();
+}
